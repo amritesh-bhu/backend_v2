@@ -1,0 +1,50 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "plugins": [
+        "eslint-plugin",
+        "import"
+    ],
+    "extends": "airbnb-base",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+        "settings": {
+            "import/resolver": {
+              "node": {
+                "extensions": [
+                  ".js"
+                ]
+              }
+            },
+            "import/extensions": [
+              ".js"
+            ]
+        },    
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+              "js": "never"
+            }
+          ],
+        "no-console": "warn",
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "quotes": [
+            "error",
+            "single",
+            "double"
+        ]
+    }
+}
