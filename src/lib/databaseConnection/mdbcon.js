@@ -1,6 +1,6 @@
 import { mongoose } from "mongoose"
 
-export const dbcon = async (url)=>{
+export const mdbcon = async (url)=>{
     try{
     const connection = await mongoose.connect(url)
         console.log("connected to database successfully")

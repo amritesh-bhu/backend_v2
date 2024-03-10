@@ -11,7 +11,7 @@ export const authRoutes = (basepath, app) => {
             res.status(401).send({ msg: 'Please login' })
             return
         }
-        res.send({ msg: 'already loged in' })
+        res.send({ msg: 'already logged in' })
     }))
 
     app.delete(`${basepath}/logout`, handleRoute(sessionCheck), handleRoute(async (req, res) => {
