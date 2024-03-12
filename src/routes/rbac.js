@@ -12,7 +12,7 @@ const rbacTasks = (basepath, app) => {
     //roleBinding
     app.post(`${basepath}/rolebinding`,handleRoute(async (req,res)=>{
         const {email,resourceId,action} = req.body
-        const resorce = await rbacDomain.addRoleBinding({email,resourceId,action})
+        const resource = await rbacDomain.addRoleBinding({email,resourceId,action})
         res.json(resource)
     }))
 
@@ -27,6 +27,13 @@ const rbacTasks = (basepath, app) => {
     app.delete(`${basepath}/:id`, handleRoute(async (req, res) => {
         const id = req.params.id
         const resource = await rbacDomain.deletResource({id})
+        res.json(resource)
+    }))
+
+    //action request
+    app.get(`${basepath}/actionreq`, handleRoute(async (req,res) =>{
+        const {email,resourceId,action} = req.body
+        const resource = await rbacDomain.updateAction({email,resourceId,action})
         res.json(resource)
     }))
 }

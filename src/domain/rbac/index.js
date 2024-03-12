@@ -33,9 +33,20 @@ const deletResource = async ({ id }) => {
     return item
 }
 
+const updateAction = async ({email,resourceId,action}) =>{
+    const resource = await rbacModel.findOne({email,resourceId})
+    if(!resource){
+        throw new Error('resource not available')
+    }
+    // const action = [...resource.action,action]
+    const rsrc = await rbacModel.updateOne({_id: resource._id},{$push : {action : action}})
+    return rsrc
+}
+
 export const rbacDomain = {
     listResources,
     addRoleBinding,
     canI,
-    deletResource
+    deletResource,
+    updateAction
 }
