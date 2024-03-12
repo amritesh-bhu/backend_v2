@@ -16,11 +16,11 @@ app.use(express.json())
 app.use(cookieParser())
 
 
-authRoutes('/auth', app)
+authRoutes('/auth/user', app)
 
 app.use(handleRoute(sessionCheck))
 
-taskRouter('/task',app)
+taskRouter('/user/task',app)
 
 app.use((err,req,res,next) => {
     res.status(500).json({'error': err.message})

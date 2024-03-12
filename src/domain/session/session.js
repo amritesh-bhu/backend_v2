@@ -1,20 +1,21 @@
 import { createClient } from 'redis'
 import { nanoid } from 'nanoid'
 
-export const session = async () => {
-    const client = createClient()
-    client.on(error, err => console.log('Redis Client error ', err))
-    await client.connect()
+// export const session = async () => {
+const client = createClient()
+client.on('error', err => console.log('Redis Client error ', err))
+await client.connect()
+console.log('redis connected')
+// }
+
+const createSession = async (userId) => {
+    const sessionId = nanoid(10)
+    await client.set(sessionId, userId)
+    return sessionId
 }
 
-const createSession = async ({ userId }) => {
-    const userSession = nanoid()
-    await client.set(userSession, userId)
-    return userSession
-}
-
-const getSession = async ({ userSession }) => {
-    const session = await client.get(userSession)
+const getSession = async ({ sessionId }) => {
+    const session = await client.get(sessionId)
     return session
 }
 
