@@ -28,11 +28,12 @@ const updateTask = async ({ id, value }) => {
     if (!item) {
         throw new Error('this task does not exist')
     }
-    const task = await taskModel.UpdateOne({ _id: item._id }, { $set: { task: value } })
+    const task = await taskModel.updateOne({ _id: item._id }, { $set: { task: value } })
     return task
 }
 
 const deleteTask = async ({ id }) => {
+    console.log(id)
     const item = await taskModel.findOne({ _id: id })
     if (!item) {
         throw new Error('this task does not exist')
