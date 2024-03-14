@@ -1,7 +1,7 @@
-import { rbacDomain } from "../domain/rbac"
-import { handleRoute } from "../lib/handleRoutes/handleRoute"
+import { rbacDomain } from "../domain/rbac/index.js"
+import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 
-const rbacTasks = (basepath, app) => {
+export const rbacRouter = (basepath, app) => {
     // get all shared items with you
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const {email} = req.body
