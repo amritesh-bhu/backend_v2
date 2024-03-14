@@ -2,7 +2,7 @@ import { requestDomain } from "../domain/actionRequest/index.js"
 import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 
 export const requestRouter = (basepath, app) => {
-    app.post(`${basepath}/sharedtask/req`, handleRoute(async (req, res) => {
+    app.post(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail, resourceId, action } = req.body
         const { requesterEmail } = req
 
@@ -10,11 +10,16 @@ export const requestRouter = (basepath, app) => {
         res.json(resource)
     }))
 
-    // app.get(`${basepath}/sharedtask`,handleRoute(async (req,res)=>{
+    app.get(`${basepath}/task`,handleRoute(async (req,res)=>{
+        const {ownerEmail} = req
+        const requests = await requestDomain.listRequests({ownerEmail})
+        res.json(requests)
+    }))
 
-    // }))
+    app.delete(`${basepath}/:id`,handleRoute(async (req,res)=>{
+        const {id} = req.params.id
+        const item = await requestDomain.deleteRequest({id})
 
-    // app.delete(`${basepath}/:id`,handleRoute(async (req,res)=>{
-    //     //delete the shared action
-    // }))
+        res.json(item)
+    }))
 }
