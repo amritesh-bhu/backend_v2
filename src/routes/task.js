@@ -8,8 +8,15 @@ export const taskRouter = (basepath, app) => {
         res.json(tasks)
     }))
 
+    app.get(`${basepath}/taskbyid`,handleRoute(async (req,res)=>{
+        const tasks = await taskDomain.getTasksById({id})
+        res.json(tasks)
+    }))
+
     app.post(`${basepath}/newtask`, handleRoute(async (req, res) => {
-        const { value, userId } = req.body
+        const { value } = req.body
+        const { userId } = req
+        console.log(value,userId)
         const item = await taskDomain.createTask({ value, userId })
         res.json(item)
     }))

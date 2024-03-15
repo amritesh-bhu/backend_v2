@@ -4,15 +4,15 @@ import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 export const requestRouter = (basepath, app) => {
     app.post(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail, resourceId, action } = req.body
-        const { requesterEmail } = req
+        const { email } = req
 
-        const resource = await requestDomain.addActionableRequest({ requesterEmail, ownerEmail, resourceId, action })
+        const resource = await requestDomain.addActionableRequest({ email, ownerEmail, resourceId, action })
         res.json(resource)
     }))
 
     app.get(`${basepath}/task`,handleRoute(async (req,res)=>{
-        const {ownerEmail} = req
-        const requests = await requestDomain.listRequests({ownerEmail})
+        const {email} = req
+        const requests = await requestDomain.listRequests({email})
         res.json(requests)
     }))
 

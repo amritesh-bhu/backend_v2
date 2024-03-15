@@ -1,25 +1,27 @@
 import mongoose from 'mongoose'
 
 const rbacSchema = mongoose.Schema({
-    email: { type: String, required: true },
+    ownerEmail : {type :String, required:true},
+    userEmail: { type: String, required: true },
     resourceId: { type: String, required: true },
-    action: { type: Array }
+    actions: { type: Array }
 })
 
 const rbacModel = mongoose.model('sharedTasks', rbacSchema)
 
-const listResources = async ({ email }) => {
-    const resources = await rbacModel.find({ email })
+const listResources = async ({ ownerEmail }) => {
+    const resources = await rbacModel.find({ ownerEmail })
     return resources
 }
 
-const addRoleBinding = async ({ email, resourceId, actions }) => {
-    const resource = await rbacModel.create({ email, resourceId, actions })
+const addRoleBinding = async ({ownerEmail, userEmail, resourceId, actions }) => {
+    console.log( ownerEmail, userEmail, resourceId, actions )
+    const resource = await rbacModel.create({ ownerEmail,userEmail, resourceId, actions })
     return resource
 }
 
-const canI = async ({ email, resourceId, action }) => {
-    const resource = await rbacModel.findOne({ email, resourceId, action })
+const canI = async ({ ownerEmail, resourceId, actions }) => {
+    const resource = await rbacModel.findOne({ userEmail:ownerEmail, resourceId, actions })
     return resource != null
 }
 
@@ -34,12 +36,12 @@ const deletResource = async ({ id }) => {
 }
 
 const updateAction = async ({email,resourceId,action}) =>{
-    const resource = await rbacModel.findOne({email,resourceId})
+    const resource = await rbacModel.findOne({userEmail:email,resourceId})
     if(!resource){
         throw new Error('resource not available')
     }
     // const action = [...resource.action,action]
-    const rsrc = await rbacModel.updateOne({_id: resource._id},{$push : {action : action}})
+    const rsrc = await rbacModel.updateOne({_id: resource._id},{$push : {actions : action}})
     return rsrc
 }
 

@@ -19,7 +19,7 @@ const getSession = async ({ sessionId }) => {
     return session
 }
 
-const deleteSession = async ({ sessionId }) => {
+const deleteSession = async ( sessionId ) => {
     const session = await client.del(sessionId)
     return session
 }

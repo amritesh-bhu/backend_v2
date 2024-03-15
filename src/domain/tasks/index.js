@@ -29,7 +29,7 @@ const updateTask = async ({ id, value }) => {
         throw new Error('this task does not exist')
     }
     const task = await taskModel.updateOne({ _id: item._id }, { $set: { task: value } })
-    return task
+    return await taskModel.find({_id:item._id})
 }
 
 const deleteTask = async ({ id }) => {
@@ -39,7 +39,18 @@ const deleteTask = async ({ id }) => {
         throw new Error('this task does not exist')
     }
     const task = await taskModel.deleteOne({ _id: item._id })
-    return task
+    return item
+}
+
+const getTasksById = async ({ ids }) => {
+    const objectids = ids.map((id) => {
+        return new mongoose.Types.ObjectId(id)
+    })
+    const tasks = await taskModel.find({ _id: { $in: objectids } })
+    if (!tasks) {
+        throw new Error('some error occured')
+    }
+    return tasks
 }
 
 
@@ -47,5 +58,6 @@ export const taskDomain = {
     listTask,
     createTask,
     updateTask,
-    deleteTask
+    deleteTask,
+    getTasksById
 }

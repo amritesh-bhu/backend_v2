@@ -40,8 +40,14 @@ const createUser = async ({ email, password }) => {
     return user
 }
 
+const registerUser = async ({userId}) =>{
+    const user = await userModel.findOne({_id:userId})
+    return user
+}
+
 
 export const userDomain = {
     authenticateUser,
-    createUser
+    createUser,
+    registerUser
 }
