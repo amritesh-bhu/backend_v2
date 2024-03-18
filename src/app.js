@@ -24,7 +24,7 @@ app.use(handleRoute(sessionCheck))
 
 taskRouter('/user/task', app)
 rbacRouter('/rbac/tasks', app)
-requestRouter('action/reqsts', app)
+requestRouter('/action/requests', app)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ 'error': err.message })

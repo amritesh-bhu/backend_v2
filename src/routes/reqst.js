@@ -5,7 +5,7 @@ export const requestRouter = (basepath, app) => {
     app.post(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail, resourceId, action } = req.body
         const { email } = req
-
+        console.log({ email, ownerEmail, resourceId, action })
         const resource = await requestDomain.addActionableRequest({ email, ownerEmail, resourceId, action })
         res.json(resource)
     }))

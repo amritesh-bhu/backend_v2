@@ -33,10 +33,10 @@ export const rbacRouter = (basepath, app) => {
     }))
 
     //action request
-    app.get(`${basepath}/actionupdate`, handleRoute(async (req, res) => {
-        const { email, resourceId, action } = req.body
-        // console.log("email".email)
-        const resource = await rbacDomain.updateAction({ email, resourceId, action })
+    app.put(`${basepath}/actionupdate`, handleRoute(async (req, res) => {
+        const { email, resourceId, actions } = req.body
+        console.log({email,resourceId,actions})
+        const resource = await rbacDomain.updateAction({ email, resourceId, actions})
         res.json(resource)
     }))
 }

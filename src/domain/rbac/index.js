@@ -35,13 +35,14 @@ const deletResource = async ({ id }) => {
     return item
 }
 
-const updateAction = async ({email,resourceId,action}) =>{
+const updateAction = async ({email,resourceId,actions}) =>{
+    
     const resource = await rbacModel.findOne({userEmail:email,resourceId})
     if(!resource){
         throw new Error('resource not available')
     }
     // const action = [...resource.action,action]
-    const rsrc = await rbacModel.updateOne({_id: resource._id},{$push : {actions : action}})
+    const rsrc = await rbacModel.updateOne({_id: resource._id},{$push : {actions : actions}})
     return rsrc
 }
 
