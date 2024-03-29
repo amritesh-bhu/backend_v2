@@ -20,11 +20,12 @@ export const authRoutes = (basepath, app) => {
         const session = await userSession.deleteSession(session_id )
         console.log(session)
         res.clearCookie(SESSION_NAME)
-        res.json({ msg: 'You have been logged out' })
+        res.json({ msg: 'You have been logged out!' })
     }))
 
-    app.get(`${basepath}/login`, handleRoute(async (req, res) => {
+    app.post(`${basepath}/login`, handleRoute(async (req, res) => {
         const { email, password } = req.body
+        console.log(email,password)
         const user = await userDomain.authenticateUser({ email, password })
         console.log(user)
         //creating session for the user 
@@ -32,12 +33,12 @@ export const authRoutes = (basepath, app) => {
         const session_id = await userSession.createSession( userId.toString() )
         res.cookie(SESSION_NAME, session_id, { httpOnly: true, secure: true, sameSite: 'None' })
 
-        res.json(user)
+        res.json({msg:"logged in successfully!"})
     }))
 
     app.post(`${basepath}/signup`, handleRoute(async (req, res) => {
         const { email, password } = req.body
         const user = await userDomain.createUser({ email, password })
-        res.json(user)
+        res.json({user,msg:"User has been created successfully!"})
     }))
 }

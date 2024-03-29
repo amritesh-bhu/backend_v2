@@ -10,6 +10,7 @@ export const sessionCheck = async (req, res, next) => {
     if (!userId) {
         res.status(401).send({ msg: "Unauthorised user, please login" })
     }
+    console.log('session user',userId)
     req.userId = userId
     req.email = email.email
     next()  

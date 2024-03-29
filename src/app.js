@@ -1,6 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-
+import cors from 'cors'
 import { mdbcon } from './lib/databaseConnection/mdbcon.js';
 import { HTTP_PORT, MONGO_URI } from './lib/env/env.js';
 import { authRoutes } from './routes/auth.js';
@@ -16,7 +16,12 @@ mdbcon(MONGO_URI)
 
 app.use(express.json())
 app.use(cookieParser())
-
+app.use(
+  cors({
+      origin: /http:\/\/(localhost|127.0.0.1):*/,
+      credentials: true
+  })
+)
 
 authRoutes('/auth/user', app)
 

@@ -3,7 +3,7 @@ import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 
 export const taskRouter = (basepath, app) => {
     app.get(`${basepath}`, handleRoute(async (req, res) => {
-        const { userId } = req.body
+        const { userId } = req
         const tasks = await taskDomain.listTask({ userId })
         res.json(tasks)
     }))
