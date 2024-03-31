@@ -8,8 +8,9 @@ export const taskRouter = (basepath, app) => {
         res.json(tasks)
     }))
 
-    app.get(`${basepath}/taskbyid`,handleRoute(async (req,res)=>{
-        const tasks = await taskDomain.getTasksById({id})
+    app.post(`${basepath}/taskbyid`,handleRoute(async (req,res)=>{
+        const {ids} = req.body
+        const tasks = await taskDomain.getTasksById({ids})
         res.json(tasks)
     }))
 

@@ -9,7 +9,7 @@ const rbacSchema = mongoose.Schema({
 
 const rbacModel = mongoose.model('sharedTasks', rbacSchema)
 
-const listResources = async ({ ownerEmail }) => {
+const listResources = async ({ userEmail:ownerEmail }) => {
     const resources = await rbacModel.find({ ownerEmail })
     return resources
 }

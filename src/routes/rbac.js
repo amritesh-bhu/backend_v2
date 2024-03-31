@@ -5,6 +5,7 @@ export const rbacRouter = (basepath, app) => {
     // get all shared items with you
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail } = req
+        console.log(ownerEmail)
         const resources = await rbacDomain.listResources({ ownerEmail })
         res.json(resources)
     }))

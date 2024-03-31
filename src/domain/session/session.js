@@ -8,9 +8,9 @@ await client.connect()
 console.log('redis connected')
 // }
 
-const createSession = async (userId) => {
+const createSession = async (userId,email) => {
     const sessionId = nanoid(10)
-    await client.set(sessionId, userId)
+    await client.set(sessionId, JSON.stringify({'userId':userId,'email':email}))
     return sessionId
 }
 
