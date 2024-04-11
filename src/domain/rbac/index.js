@@ -22,6 +22,7 @@ const addRoleBinding = async ({ ownerEmail, userEmail, resourceId, actions }) =>
 
 const canI = async ({ ownerEmail, resourceId, actions }) => {
     const resource = await rbacModel.findOne({ userEmail: ownerEmail, resourceId, actions })
+    console.log('domain can i',resource)
     return resource != null
 }
 

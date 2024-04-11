@@ -14,7 +14,6 @@ export const rbacRouter = (basepath, app) => {
         const { userEmail, resourceId, actions } = req.body
         const { ownerEmail } = req
         const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })
-        console.log(resource)
         res.json(resource)
     }))
 
@@ -36,9 +35,9 @@ export const rbacRouter = (basepath, app) => {
     //action request
     app.put(`${basepath}/actionupdate`, handleRoute(async (req, res) => {
         const { email, resourceId, actions } = req.body
-        console.log({email,resourceId,actions})
+        console.log({ email, resourceId, actions })
 
-        const resource = await rbacDomain.updateAction({ email, resourceId, actions})
+        const resource = await rbacDomain.updateAction({ email, resourceId, actions })
         res.json(resource)
     }))
 }
