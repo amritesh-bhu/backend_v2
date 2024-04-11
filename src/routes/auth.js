@@ -24,9 +24,8 @@ export const authRoutes = (basepath, app) => {
 
     app.post(`${basepath}/login`, handleRoute(async (req, res) => {
         const { email, password } = req.body
-        console.log(email,password)
         const user = await userDomain.authenticateUser({ email, password })
-        console.log('User',user)
+        console.log(user)
         //creating session for the user 
         const userId = user._id
         const session_id = await userSession.createSession( userId.toString(),user.email.toString())

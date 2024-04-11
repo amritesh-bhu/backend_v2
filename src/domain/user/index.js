@@ -23,7 +23,6 @@ const userModel = mongoose.model('users', userSchema)
 const hashPassword = (password, salt) => crypto.createHash('md5').update(Buffer.from(password)).digest('hex') + salt
 
 const authenticateUser = async ({ email, password }) => {
-    console.log('auth',email,password)
     const user = await userModel.findOne({ email })
     if (!user) {
         throw new Error("Please sign up to login!")

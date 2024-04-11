@@ -5,7 +5,6 @@ export const rbacRouter = (basepath, app) => {
     // get all shared items with you
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail } = req
-        console.log(ownerEmail)
         const resources = await rbacDomain.listResources({ ownerEmail })
         res.json(resources)
     }))
@@ -15,6 +14,7 @@ export const rbacRouter = (basepath, app) => {
         const { userEmail, resourceId, actions } = req.body
         const { ownerEmail } = req
         const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })
+        console.log(resource)
         res.json(resource)
     }))
 
