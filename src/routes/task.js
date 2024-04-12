@@ -17,7 +17,6 @@ export const taskRouter = (basepath, app) => {
     app.post(`${basepath}/newtask`, handleRoute(async (req, res) => {
         const { value } = req.body
         const { userId } = req
-        console.log(value,userId)
         const item = await taskDomain.createTask({ value, userId })
         res.json(item)
     }))
@@ -30,7 +29,6 @@ export const taskRouter = (basepath, app) => {
 
     app.delete(`${basepath}/:id`, handleRoute(async (req, res) => {
         const id = req.params.id
-        console.log(id)
         const item = await taskDomain.deleteTask({ id })
         res.json(item)
     }))

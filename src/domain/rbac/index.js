@@ -15,19 +15,17 @@ const listResources = async ({ ownerEmail }) => {
 }
 
 const addRoleBinding = async ({ ownerEmail, userEmail, resourceId, actions }) => {
-    console.log(ownerEmail, userEmail, resourceId, actions)
     const resource = await rbacModel.create({ ownerEmail, userEmail, resourceId, actions })
     return resource
 }
 
 const canI = async ({ ownerEmail, resourceId, actions }) => {
     const resource = await rbacModel.findOne({ userEmail: ownerEmail, resourceId, actions })
-    console.log('domain can i',resource)
     return resource != null
 }
 
 const deletResource = async ({ id }) => {
-    const resource = await rbacModel.findOne({ _id: id })
+    const resource = await rbacModel.findOne({ resourceId: id })
     if (!resource) {
         // throw new Error('resource does not exist')
         return false

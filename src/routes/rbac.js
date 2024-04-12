@@ -18,7 +18,7 @@ export const rbacRouter = (basepath, app) => {
     }))
 
     //checking can i perform this operation on this task
-    app.get(`${basepath}/cani`, handleRoute(async (req, res) => {
+    app.post(`${basepath}/cani`, handleRoute(async (req, res) => {
         const { resourceId, actions } = req.body
         const { ownerEmail } = req
         const decision = await rbacDomain.canI({ ownerEmail, resourceId, actions })
@@ -35,8 +35,6 @@ export const rbacRouter = (basepath, app) => {
     //action request
     app.put(`${basepath}/actionupdate`, handleRoute(async (req, res) => {
         const { email, resourceId, actions } = req.body
-        console.log({ email, resourceId, actions })
-
         const resource = await rbacDomain.updateAction({ email, resourceId, actions })
         res.json(resource)
     }))
