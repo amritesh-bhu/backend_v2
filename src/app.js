@@ -4,11 +4,11 @@ import cors from 'cors'
 import { mdbcon } from './lib/databaseConnection/mdbcon.js';
 import { HTTP_PORT, MONGO_URI } from './lib/env/env.js';
 import { authRoutes } from './routes/auth.js';
-import { sessionCheck } from './lib/sessionCheck/sessionCheck.js';
 import { handleRoute } from './lib/handleRoutes/handleRoute.js';
 import { taskRouter } from './routes/task.js';
 import { rbacRouter } from './routes/rbac.js';
 import { requestRouter } from './routes/reqst.js';
+import { sessionCheck } from './middlewares/sessionCheck.js';
 
 const app = express();
 

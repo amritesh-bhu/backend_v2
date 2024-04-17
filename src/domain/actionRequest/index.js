@@ -14,20 +14,22 @@ const reqSchema = mongoose.Schema({
         required: true
     },
     action: {
-        type: String,
+        type: Array,
         required: true
     }
 })
 
 const reqModel = mongoose.model('reqActions', reqSchema)
 
-const listRequests = async ({ email }) => {
-    const resources = await reqModel.find({ email })
+const listRequests = async ({ ownerEmail }) => {
+    const resources = await reqModel.find({ ownerEmail }).select("-ownerEmail")
+    console.log('reqs lists',resources)
     return resources
 }
 
-const addActionableRequest = async ({ email, ownerEmail, resourceId, action }) => {
-    const resource = await reqModel.create({ requesterEmail: email, ownerEmail, resourceId, action })
+const addActionableRequest = async ({ ownerEmail,resourceOwner, resourceId, action }) => {
+    const resource = await reqModel.create({ requesterEmail: ownerEmail, ownerEmail:resourceOwner, resourceId, action })
+    console.log('resource',resource)
     return resource
 }
 

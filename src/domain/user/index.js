@@ -41,7 +41,7 @@ const createUser = async ({ email, password }) => {
 }
 
 const registerUser = async ({userId}) =>{
-    const user = await userModel.findOne({_id:userId})
+    const user = await userModel.findOne({_id:userId}).select("-password -salt")
     return user
 }
 

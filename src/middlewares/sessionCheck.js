@@ -1,5 +1,5 @@
-import { userSession } from "../../domain/session/session.js";
-import { SESSION_NAME } from "../env/env.js"
+import { userSession } from "../domain/session/session.js";
+import { SESSION_NAME } from "../lib/env/env.js"
 
 export const sessionCheck = async (req, res, next) => {
     const sessionId = req.cookies[SESSION_NAME]

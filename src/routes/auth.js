@@ -2,7 +2,7 @@ import { userSession } from '../domain/session/session.js'
 import { userDomain } from '../domain/user/index.js'
 import { SESSION_NAME } from '../lib/env/env.js'
 import { handleRoute } from '../lib/handleRoutes/handleRoute.js'
-import { sessionCheck } from '../lib/sessionCheck/sessionCheck.js'
+import { sessionCheck } from '../middlewares/sessionCheck.js'
 
 export const authRoutes = (basepath, app) => {
 
