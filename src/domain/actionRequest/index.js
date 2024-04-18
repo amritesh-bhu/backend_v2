@@ -14,7 +14,7 @@ const reqSchema = mongoose.Schema({
         required: true
     },
     action: {
-        type: Array,
+        type: String,
         required: true
     }
 })
@@ -23,7 +23,6 @@ const reqModel = mongoose.model('reqActions', reqSchema)
 
 const listRequests = async ({ ownerEmail }) => {
     const resources = await reqModel.find({ ownerEmail }).select("-ownerEmail")
-    console.log('reqs lists',resources)
     return resources
 }
 

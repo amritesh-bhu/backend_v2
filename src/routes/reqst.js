@@ -17,7 +17,7 @@ export const requestRouter = (basepath, app) => {
     }))
 
     app.delete(`${basepath}/:id`, handleRoute(async (req, res) => {
-        const { id } = req.params.id
+        const id  = req.params.id
         const item = await requestDomain.deleteRequest({ id })
 
         res.json(item)
