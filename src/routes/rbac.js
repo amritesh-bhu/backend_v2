@@ -1,8 +1,9 @@
 import { rbacDomain } from "../domain/rbac/index.js"
 import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
+// import { sendWsMessage } from "../lib/ws-utils.js"
 
 export const rbacRouter = (basepath, app) => {
-    // get all shared items with you
+    // get all shared items
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail } = req
         const resources = await rbacDomain.listResources({ ownerEmail })
@@ -14,6 +15,16 @@ export const rbacRouter = (basepath, app) => {
         const { userEmail, resourceId, actions } = req.body
         const { ownerEmail } = req
         const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })
+
+
+
+        // TODO: get all active sessions of userEmail ( user to whoom we have to send message )
+        // const sessions = []
+
+        // sessions.array.forEach(element => {
+        //     sendWsMessage(element, "you go message refresh your page")
+        // });
+
         res.json(resource)
     }))
 

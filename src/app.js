@@ -9,6 +9,9 @@ import { taskRouter } from './routes/task.js';
 import { rbacRouter } from './routes/rbac.js';
 import { requestRouter } from './routes/reqst.js';
 import { sessionCheck } from './middlewares/sessionCheck.js';
+import { WebSocketServer } from 'ws';
+import Cookies  from 'cookies';
+// import { cleanWsCon, setWsCon } from './lib/ws-utils.js';
 
 const app = express();
 
@@ -18,14 +21,15 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(
   cors({
-      origin: /http:\/\/(localhost|127.0.0.1):*/,
-      credentials: true
+    origin: /http:\/\/(localhost|127.0.0.1):*/,
+    credentials: true
   })
 )
 
 authRoutes('/auth/user', app)
 
 app.use(handleRoute(sessionCheck))
+
 
 taskRouter('/user/task', app)
 rbacRouter('/rbac/tasks', app)
@@ -38,6 +42,24 @@ app.use((err, req, res, next) => {
 )
 
 
-app.listen(HTTP_PORT, () => {
+const server = app.listen(HTTP_PORT, () => {
   console.log(`server is listening on port no ${HTTP_PORT}`)
+})
+
+const wss = new WebSocketServer({ server })
+
+wss.on('connection', (ws,req) => {
+  const k = new Cookies(req)
+  const session = k.get("session")
+  // console.log(session)
+  // setWsCon(ws,session)
+  
+  ws.on('message', (data) => {
+    console.log('data from clients', data)
+    ws.send('a client has connected')
+    ws.on('close',()=>{
+      // cleanWsCon(session)
+      console.log('client has disconnected')
+    })
+  })
 })

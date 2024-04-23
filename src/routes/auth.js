@@ -16,6 +16,8 @@ export const authRoutes = (basepath, app) => {
 
     app.delete(`${basepath}/logout`, handleRoute(sessionCheck), handleRoute(async (req, res) => {
         const session_id = req.cookies[SESSION_NAME]
+        console.log(session_id)
+        await userSession.deleteUserSession(req.userId,session_id)
         const session = await userSession.deleteSession(session_id )
         res.clearCookie(SESSION_NAME)
         res.json({ msg: 'You have been logged out!' })
@@ -29,6 +31,8 @@ export const authRoutes = (basepath, app) => {
         const userId = user._id
         const session_id = await userSession.createSession( userId.toString(),user.email.toString())
         res.cookie(SESSION_NAME, session_id, { httpOnly: true, secure: true, sameSite: 'None' })
+
+        await userSession.manageSession(userId,session_id)
 
         res.json({msg:"logged in successfully!"})
     }))
