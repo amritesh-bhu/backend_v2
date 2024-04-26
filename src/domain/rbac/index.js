@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { mailSender } from '../../lib/sendEmail/email-sender.js'
 
 const rbacSchema = mongoose.Schema({
     ownerEmail: { type: String, required: true },
@@ -16,6 +17,7 @@ const listResources = async ({ ownerEmail }) => {
 
 const addRoleBinding = async ({ ownerEmail, userEmail, resourceId, actions }) => {
     const resource = await rbacModel.create({ ownerEmail, userEmail, resourceId, actions })
+    mailSender({senderEmail:ownerEmail,receiverEmail:userEmail})
     return resource
 }
 

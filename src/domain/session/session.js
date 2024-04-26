@@ -67,5 +67,6 @@ export const userSession = {
     deleteSession,
     manageSession,
     deleteUserSession,
-    logoutFromAllDevices
+    logoutFromAllDevices,
+    getUserSessions
 }

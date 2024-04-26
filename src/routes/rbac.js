@@ -2,11 +2,14 @@ import { rbacDomain } from "../domain/rbac/index.js"
 import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 // import { sendWsMessage } from "../lib/ws-utils.js"
 
-export const rbacRouter = (basepath, app) => {
+export const rbacRouter = (basepath, app, wss) => {
     // get all shared items
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail } = req
         const resources = await rbacDomain.listResources({ ownerEmail })
+        wss.clients.forEach(client => {
+            client.send(resources)
+        });
         res.json(resources)
     }))
 
@@ -24,6 +27,7 @@ export const rbacRouter = (basepath, app) => {
         // sessions.array.forEach(element => {
         //     sendWsMessage(element, "you go message refresh your page")
         // });
+        
 
         res.json(resource)
     }))

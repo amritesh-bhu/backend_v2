@@ -10,10 +10,16 @@ import { rbacRouter } from './routes/rbac.js';
 import { requestRouter } from './routes/reqst.js';
 import { sessionCheck } from './middlewares/sessionCheck.js';
 import { WebSocketServer } from 'ws';
-import Cookies  from 'cookies';
+import Cookies from 'cookies';
 // import { cleanWsCon, setWsCon } from './lib/ws-utils.js';
 
 const app = express();
+
+const server = app.listen(HTTP_PORT, () => {
+  console.log(`server is listening on port no ${HTTP_PORT}`)
+})
+
+const wss = new WebSocketServer({ server })
 
 mdbcon(MONGO_URI)
 
@@ -32,8 +38,8 @@ app.use(handleRoute(sessionCheck))
 
 
 taskRouter('/user/task', app)
-rbacRouter('/rbac/tasks', app)
-requestRouter('/action/requests', app)
+rbacRouter('/rbac/tasks', app, wss)
+requestRouter('/action/requests', app, wss)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ 'error': err.message })
@@ -41,23 +47,16 @@ app.use((err, req, res, next) => {
 }
 )
 
-
-const server = app.listen(HTTP_PORT, () => {
-  console.log(`server is listening on port no ${HTTP_PORT}`)
-})
-
-const wss = new WebSocketServer({ server })
-
-wss.on('connection', (ws,req) => {
+wss.on('connection', (ws, req) => {
   const k = new Cookies(req)
   const session = k.get("session")
   // console.log(session)
   // setWsCon(ws,session)
-  
+
   ws.on('message', (data) => {
     console.log('data from clients', data)
     ws.send('a client has connected')
-    ws.on('close',()=>{
+    ws.on('close', () => {
       // cleanWsCon(session)
       console.log('client has disconnected')
     })
