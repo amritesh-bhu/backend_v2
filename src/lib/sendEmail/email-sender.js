@@ -1,20 +1,21 @@
 import { createTransport } from "nodemailer"
-import { PASSWORD, USERNAME } from "../env/env.js"
+import { BREVO_EMAIL_TOKEN, BREVO_HOST, BREV_PORT, PLATFORM_EMAIL } from "../env/env.js"
 
-export const mailSender = ({senderEmail,receiverEmail}) => {
-    let transporter = createTransport({
-        service: "gmail",
-        auth: {
-            user: USERNAME,
-            pass: PASSWORD
-        }
-    })
+let transporter = createTransport({
+    host: BREVO_HOST,
+    port: BREV_PORT,
+    auth: {
+        user: PLATFORM_EMAIL,
+        pass: BREVO_EMAIL_TOKEN
+    }
+})
 
+export const mailSender = (receiverEmail) => {
     let mailOptions = {
-        from: senderEmail,
+        from: PLATFORM_EMAIL,
         to: receiverEmail,
-        subject: mailSubject,
-        text: `Hi ${receiverEmail} , There is a resource share with you by ${senderEmail}`
+        subject: 'Regarding resource',
+        text: `Hi sample , There is a resource share with you`
     }
 
     transporter.sendMail(mailOptions, async (error, info) => {
@@ -25,3 +26,5 @@ export const mailSender = ({senderEmail,receiverEmail}) => {
         }
     })
 }
+
+// mailSender()

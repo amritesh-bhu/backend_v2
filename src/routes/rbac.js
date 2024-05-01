@@ -1,15 +1,17 @@
 import { rbacDomain } from "../domain/rbac/index.js"
 import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
+import { mailSender } from "../lib/sendEmail/email-sender.js"
 // import { sendWsMessage } from "../lib/ws-utils.js"
 
-export const rbacRouter = (basepath, app, wss) => {
+export const rbacRouter = (basepath, app, wsConns) => {
     // get all shared items
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail } = req
         const resources = await rbacDomain.listResources({ ownerEmail })
-        wss.clients.forEach(client => {
-            client.send(resources)
-        });
+        const userId = req.userId
+        // Object.keys(wsCon[userId]).forEach((client)=>{
+        //     wsCon[userId][client].send(resources)
+        //   })   
         res.json(resources)
     }))
 
@@ -17,18 +19,9 @@ export const rbacRouter = (basepath, app, wss) => {
     app.post(`${basepath}/rolebinding`, handleRoute(async (req, res) => {
         const { userEmail, resourceId, actions } = req.body
         const { ownerEmail } = req
-        const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })
-
-
-
-        // TODO: get all active sessions of userEmail ( user to whoom we have to send message )
-        // const sessions = []
-
-        // sessions.array.forEach(element => {
-        //     sendWsMessage(element, "you go message refresh your page")
-        // });
-        
-
+        const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })     
+        console.log('rolebinding',req.userId)
+        // mailSender(userEmail,`${ownerEmail} has shared a resource with you`)
         res.json(resource)
     }))
 
@@ -51,6 +44,7 @@ export const rbacRouter = (basepath, app, wss) => {
     app.put(`${basepath}/actionupdate`, handleRoute(async (req, res) => {
         const { email, resourceId, actions } = req.body
         const resource = await rbacDomain.updateAction({ email, resourceId, actions })
+        // mailSender(email,"Resource owner has approve your request")
         res.json(resource)
     }))
 }

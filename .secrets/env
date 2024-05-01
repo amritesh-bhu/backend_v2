@@ -1,0 +1,4 @@
+BREVO_EMAIL_TOKEN="xsmtpsib-8f290bcd9ffdb756e750cd19e57f49419f081ca9198842eabc259f76c56e12ba-OnDw5TGaZ2fz6AgH"
+BREVO_PORT=587
+BREVO_HOST="smtp-relay.brevo.com"
+PLATFORM_EMAIL="amriteshbhu438@gmail.com"

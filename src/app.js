@@ -10,16 +10,12 @@ import { rbacRouter } from './routes/rbac.js';
 import { requestRouter } from './routes/reqst.js';
 import { sessionCheck } from './middlewares/sessionCheck.js';
 import { WebSocketServer } from 'ws';
+
+import { userSession } from './domain/session/session.js';
+import { mailSender } from './lib/sendEmail/email-sender.js';
 import Cookies from 'cookies';
-// import { cleanWsCon, setWsCon } from './lib/ws-utils.js';
 
 const app = express();
-
-const server = app.listen(HTTP_PORT, () => {
-  console.log(`server is listening on port no ${HTTP_PORT}`)
-})
-
-const wss = new WebSocketServer({ server })
 
 mdbcon(MONGO_URI)
 
@@ -36,29 +32,49 @@ authRoutes('/auth/user', app)
 
 app.use(handleRoute(sessionCheck))
 
+const wsConn = {}
 
 taskRouter('/user/task', app)
-rbacRouter('/rbac/tasks', app, wss)
-requestRouter('/action/requests', app, wss)
+rbacRouter('/rbac/tasks', app)
+requestRouter('/action/requests', app)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ 'error': err.message })
   next()
-}
-)
+})
 
-wss.on('connection', (ws, req) => {
+const server = app.listen(HTTP_PORT, () => {
+  console.log(`server is listening on port no ${HTTP_PORT}`)
+})
+
+//configuring websocket
+const wss = new WebSocketServer({ server })
+
+
+wss.on('connection', async (ws, req) => {
+  // ws.send("connected with backend")
+
   const k = new Cookies(req)
-  const session = k.get("session")
-  // console.log(session)
-  // setWsCon(ws,session)
+  const sessionId = k.get("session")
+  const userInfo = await userSession.getSession({ sessionId })
+  const userId = JSON.parse(userInfo).userId
+  if (!userId in wsConn) {
+    wsConn[userId] = { [sessionId]: ws }
+  } else {
+    wsConn[userId] = { ...wsConn[userId], [sessionId]: ws }
+  }
 
+  // console.log(Object.keys(wsCon[userId]))
+  // mailSender('sample@gmail.com') // written for testing purpose 
   ws.on('message', (data) => {
-    console.log('data from clients', data)
-    ws.send('a client has connected')
-    ws.on('close', () => {
-      // cleanWsCon(session)
-      console.log('client has disconnected')
-    })
+    ws.send(' Regitered to server')
+    // ws.send(data)
+  })
+
+  ws.send('connected to server')
+  ws.on('close', () => {
+    delete wsConn[userId][sessionId]
+    // console.log('disconnect',Object.keys(wsCon[userId]))
+    // console.log('client has disconnected')
   })
 })

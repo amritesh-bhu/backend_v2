@@ -2,7 +2,6 @@ import { userSession } from '../domain/session/session.js'
 import { userDomain } from '../domain/user/index.js'
 import { SESSION_NAME } from '../lib/env/env.js'
 import { handleRoute } from '../lib/handleRoutes/handleRoute.js'
-import { cleanWsCon, setWsCon } from '../lib/ws-utils.js'
 import { sessionCheck } from '../middlewares/sessionCheck.js'
 
 export const authRoutes = (basepath, app) => {
@@ -19,7 +18,6 @@ export const authRoutes = (basepath, app) => {
         const session_id = req.cookies[SESSION_NAME]
         await userSession.deleteUserSession(req.userId, session_id)
         await userSession.deleteSession(session_id)
-        cleanWsCon(userId, session_id)
         res.clearCookie(SESSION_NAME)
         res.json({ msg: 'You have been logged out!' })
     }))
@@ -29,7 +27,6 @@ export const authRoutes = (basepath, app) => {
         const userId = req.userId
         await userSession.logoutFromAllDevices(userId)
         await userSession.deleteSession(session_id)
-        cleanWsCon(userId, session_id, true)
         res.clearCookie(SESSION_NAME)
         res.json({ msg: 'You have been logout from all the devices' })
     }))
@@ -44,9 +41,6 @@ export const authRoutes = (basepath, app) => {
         res.cookie(SESSION_NAME, session_id, { httpOnly: true, secure: true, sameSite: 'None' })
 
         await userSession.manageSession(userId, session_id)
-
-        await setWsCon(userId, session_id)
-
         res.json({ msg: "logged in successfully!" })
     }))
 
