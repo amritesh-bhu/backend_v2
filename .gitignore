@@ -1,3 +1,4 @@
 /node_modules
 .data
 /src/lib/env
+.secrets

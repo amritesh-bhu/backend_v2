@@ -5,6 +5,9 @@ export const taskRouter = (basepath, app) => {
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { userId } = req
         const tasks = await taskDomain.listTask({ userId })
+        // Object.keys(wsCon[userId]).forEach((client)=>{
+        //     wsCon[userId][client].send(tasks)
+        // })   
         res.json(tasks)
     }))
 

@@ -17,7 +17,6 @@ const listResources = async ({ ownerEmail }) => {
 
 const addRoleBinding = async ({ ownerEmail, userEmail, resourceId, actions }) => {
     const resource = await rbacModel.create({ ownerEmail, userEmail, resourceId, actions })
-    mailSender({senderEmail:ownerEmail,receiverEmail:userEmail})
     return resource
 }
 

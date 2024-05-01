@@ -1,5 +1,6 @@
 import { requestDomain } from "../domain/actionRequest/index.js"
 import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
+import { mailSender } from "../lib/sendEmail/email-sender.js"
 import { resourceOwnerEmail } from "../middlewares/resourceOwner.js"
 
 export const requestRouter = (basepath, app) => {
@@ -7,6 +8,7 @@ export const requestRouter = (basepath, app) => {
         const { resourceId, action } = req.body
         const { ownerEmail, resourceOwner } = req
         const resource = await requestDomain.addActionableRequest({ ownerEmail, resourceOwner, resourceId, action })
+        // mailSender(resourceOwner,`${ownerEmail} has requested for the ${action} action on a resource !`)
         res.json(resource)
     }))
 
