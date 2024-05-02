@@ -3,15 +3,15 @@ import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 import { mailSender } from "../lib/sendEmail/email-sender.js"
 // import { sendWsMessage } from "../lib/ws-utils.js"
 
-export const rbacRouter = (basepath, app, wsConns) => {
+export const rbacRouter = (basepath, app, wsConn) => {
     // get all shared items
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail } = req
         const resources = await rbacDomain.listResources({ ownerEmail })
         const userId = req.userId
-        // Object.keys(wsCon[userId]).forEach((client)=>{
-        //     wsCon[userId][client].send(resources)
-        //   })   
+        Object.keys(wsConn[userId]).forEach((client)=>{
+            wsConn[userId][client].send(JSON.stringify(resources))
+          })   
         res.json(resources)
     }))
 

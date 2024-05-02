@@ -34,9 +34,9 @@ app.use(handleRoute(sessionCheck))
 
 const wsConn = {}
 
-taskRouter('/user/task', app)
-rbacRouter('/rbac/tasks', app)
-requestRouter('/action/requests', app)
+taskRouter('/user/task', app, wsConn)
+rbacRouter('/rbac/tasks', app, wsConn)
+requestRouter('/action/requests', app, wsConn)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ 'error': err.message })
