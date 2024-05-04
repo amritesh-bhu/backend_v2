@@ -10,9 +10,8 @@ import { rbacRouter } from './routes/rbac.js';
 import { requestRouter } from './routes/reqst.js';
 import { sessionCheck } from './middlewares/sessionCheck.js';
 import { WebSocketServer } from 'ws';
-
 import { userSession } from './domain/session/session.js';
-import { mailSender } from './lib/sendEmail/email-sender.js';
+// import { mailSender } from './lib/sendEmail/email-sender.js';
 import Cookies from 'cookies';
 
 const app = express();
@@ -33,9 +32,10 @@ authRoutes('/auth/user', app)
 app.use(handleRoute(sessionCheck))
 
 const wsConn = {}
+const wsConnEmail = {}
 
-taskRouter('/user/task', app, wsConn)
-rbacRouter('/rbac/tasks', app, wsConn)
+taskRouter('/user/task', app, wsConn, wsConnEmail)
+rbacRouter('/rbac/tasks', app, wsConn, wsConnEmail)
 requestRouter('/action/requests', app, wsConn)
 
 app.use((err, req, res, next) => {
@@ -51,30 +51,38 @@ const server = app.listen(HTTP_PORT, () => {
 const wss = new WebSocketServer({ server })
 
 
-wss.on('connection', async (ws, req) => {
+wss.on('connection', async (ws, req, res) => {
   // ws.send("connected with backend")
-
   const k = new Cookies(req)
   const sessionId = k.get("session")
-  const userInfo = await userSession.getSession({ sessionId })
-  const userId = JSON.parse(userInfo).userId
-  if (!userId in wsConn) {
-    wsConn[userId] = { [sessionId]: ws }
-  } else {
-    wsConn[userId] = { ...wsConn[userId], [sessionId]: ws }
+  console.log("sessionId", sessionId)
+  if (!sessionId) {
+    ws.on('close', () => {
+      ws.send('Please login first')
+    })
+    return
   }
 
-  // console.log(Object.keys(wsCon[userId]))
+  const userInfo = await userSession.getSession({ sessionId })
+  const userId = JSON.parse(userInfo).userId
+  const email = JSON.parse(userInfo).email
+  if (!userId in wsConn) {
+    wsConn[userId] = { [sessionId]: ws }
+    wsConnEmail[email] = { [sessionId]: ws }
+  } else {
+    wsConn[userId] = { ...wsConn[userId], [sessionId]: ws }
+    wsConnEmail[email] = { ...wsConnEmail[email], [sessionId]: ws }
+  }
+
+  console.log(Object.keys(wsConnEmail))
+
   // mailSender('sample@gmail.com') // written for testing purpose 
   ws.on('message', (data) => {
     ws.send(' Regitered to server')
-    // ws.send(data)
   })
 
   ws.send('connected to server')
   ws.on('close', () => {
     delete wsConn[userId][sessionId]
-    // console.log('disconnect',Object.keys(wsCon[userId]))
-    // console.log('client has disconnected')
   })
 })

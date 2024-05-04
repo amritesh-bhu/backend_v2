@@ -3,15 +3,11 @@ import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 import { mailSender } from "../lib/sendEmail/email-sender.js"
 // import { sendWsMessage } from "../lib/ws-utils.js"
 
-export const rbacRouter = (basepath, app, wsConn) => {
+export const rbacRouter = (basepath, app, wsConn, wsConnEmail) => {
     // get all shared items
     app.get(`${basepath}`, handleRoute(async (req, res) => {
         const { ownerEmail } = req
         const resources = await rbacDomain.listResources({ ownerEmail })
-        const userId = req.userId
-        Object.keys(wsConn[userId]).forEach((client)=>{
-            wsConn[userId][client].send(JSON.stringify(resources))
-          })   
         res.json(resources)
     }))
 
@@ -19,8 +15,13 @@ export const rbacRouter = (basepath, app, wsConn) => {
     app.post(`${basepath}/rolebinding`, handleRoute(async (req, res) => {
         const { userEmail, resourceId, actions } = req.body
         const { ownerEmail } = req
-        const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })     
-        console.log('rolebinding',req.userId)
+        const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })
+        if (userEmail in wsConnEmail) {
+            Object.keys(wsConnEmail[userEmail]).forEach((client) => {
+                console.log('client',client)
+                wsConnEmail[userEmail][client].send(JSON.stringify('New resource shared with you , reload pls!' ))
+            })
+        }
         // mailSender(userEmail,`${ownerEmail} has shared a resource with you`)
         res.json(resource)
     }))

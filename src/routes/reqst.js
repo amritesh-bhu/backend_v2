@@ -3,7 +3,7 @@ import { handleRoute } from "../lib/handleRoutes/handleRoute.js"
 import { mailSender } from "../lib/sendEmail/email-sender.js"
 import { resourceOwnerEmail } from "../middlewares/resourceOwner.js"
 
-export const requestRouter = (basepath, app) => {
+export const requestRouter = (basepath, app, wsConn) => {
     app.post(`${basepath}`, handleRoute(resourceOwnerEmail), handleRoute(async (req, res) => {
         const { resourceId, action } = req.body
         const { ownerEmail, resourceOwner } = req
@@ -19,7 +19,7 @@ export const requestRouter = (basepath, app) => {
     }))
 
     app.delete(`${basepath}/:id`, handleRoute(async (req, res) => {
-        const id  = req.params.id
+        const id = req.params.id
         const item = await requestDomain.deleteRequest({ id })
 
         res.json(item)

@@ -7,6 +7,7 @@ import { sessionCheck } from '../middlewares/sessionCheck.js'
 export const authRoutes = (basepath, app) => {
 
     app.get(`${basepath}/me`, handleRoute(sessionCheck), handleRoute(async (req, res) => {
+        console.log('hello')
         if (!req.userId) {
             res.status(401).send({ msg: 'Please login' })
             return

@@ -21,8 +21,8 @@
     "nanoid": "^5.0.6",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
+    "pino": "^9.0.0",
     "redis": "^4.6.13",
-    "socket.io": "^4.7.5",
     "ws": "^8.16.0"
   },
   "devDependencies": {

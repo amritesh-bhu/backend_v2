@@ -57,7 +57,6 @@ const deleteUserSession = async (userId,sessionId) =>{
     const session = JSON.parse(sessions).filter((item) => item != sessionId)
     const status = await redisClient.set(userId.toString(),JSON.stringify(session))
     const items = await redisClient.get(userId.toString())
-    console.log('remaining sessions',session)
     return status
 }
 
