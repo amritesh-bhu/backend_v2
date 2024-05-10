@@ -18,7 +18,6 @@ export const taskRouter = (basepath, app, wsConn) => {
         const { value } = req.body
         const { userId } = req
         const item = await taskDomain.createTask({ value, userId })
-        console.log("new task", item)
         Object.keys(wsConn[userId]).forEach((client) => {
             wsConn[userId][client].send(JSON.stringify({ type: "new task", item }))
         })

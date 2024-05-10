@@ -55,7 +55,6 @@ wss.on('connection', async (ws, req, res) => {
   // ws.send("connected with backend")
   const k = new Cookies(req)
   const sessionId = k.get("session")
-  console.log("sessionId", sessionId)
   if (!sessionId) {
     ws.on('close', () => {
       ws.send('Please login first')
@@ -74,7 +73,7 @@ wss.on('connection', async (ws, req, res) => {
     wsConnEmail[email] = { ...wsConnEmail[email], [sessionId]: ws }
   }
 
-  console.log(Object.keys(wsConnEmail))
+  // console.log(Object.keys(wsConnEmail))
 
   // mailSender('sample@gmail.com') // written for testing purpose 
   ws.on('message', (data) => {

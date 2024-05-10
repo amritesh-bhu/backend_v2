@@ -18,7 +18,6 @@ export const rbacRouter = (basepath, app, wsConn, wsConnEmail) => {
         const resource = await rbacDomain.addRoleBinding({ ownerEmail, userEmail, resourceId, actions })
         if (userEmail in wsConnEmail) {
             Object.keys(wsConnEmail[userEmail]).forEach((client) => {
-                console.log('client',client)
                 wsConnEmail[userEmail][client].send(JSON.stringify('New resource shared with you , reload pls!' ))
             })
         }

@@ -33,7 +33,7 @@ const updateTask = async ({ id, value }) => {
 }
 
 const deleteTask = async ({ id }) => {
-    console.log(id)
+    // console.log(id)
     const item = await taskModel.findOne({ _id: id })
     if (!item) {
         throw new Error('this task does not exist')

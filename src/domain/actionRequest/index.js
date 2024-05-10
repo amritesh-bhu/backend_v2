@@ -28,7 +28,7 @@ const listRequests = async ({ ownerEmail }) => {
 
 const addActionableRequest = async ({ ownerEmail,resourceOwner, resourceId, action }) => {
     const resource = await reqModel.create({ requesterEmail: ownerEmail, ownerEmail:resourceOwner, resourceId, action })
-    console.log('resource',resource)
+    // console.log('resource',resource)
     return resource
 }
 

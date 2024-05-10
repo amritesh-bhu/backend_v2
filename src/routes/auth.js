@@ -7,7 +7,6 @@ import { sessionCheck } from '../middlewares/sessionCheck.js'
 export const authRoutes = (basepath, app) => {
 
     app.get(`${basepath}/me`, handleRoute(sessionCheck), handleRoute(async (req, res) => {
-        console.log('hello')
         if (!req.userId) {
             res.status(401).send({ msg: 'Please login' })
             return
@@ -35,7 +34,6 @@ export const authRoutes = (basepath, app) => {
     app.post(`${basepath}/login`, handleRoute(async (req, res) => {
         const { email, password } = req.body
         const user = await userDomain.authenticateUser({ email, password })
-        console.log(user)
         //creating session for the user 
         const userId = user._id
         const session_id = await userSession.createSession(userId.toString(), user.email.toString())
